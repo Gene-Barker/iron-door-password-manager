@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Main{
     public static void main(String[] args) throws NoSuchAlgorithmException {
 
-        File userFolder = new File("user");
+        File userFolder = new File("users");
         userFolder.mkdir();
 
 
