@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+public class Console {
+    Scanner scanner;
+
+    public Console(){
+        scanner = new Scanner(System.in);
+    }
+
+    public String mainMenu(){
+        System.out.println("Sign up, log in, or exit?\n");
+        return (scanner.nextLine());
+    }
+
+    public String[] getUsernameAndPassword(){
+        String[] usernameAndPassword = new String[2];
+
+        System.out.println("Enter username");
+        usernameAndPassword[0] = scanner.nextLine();
+
+        System.out.println("Enter password");
+        usernameAndPassword[1] = scanner.nextLine();
+
+        return usernameAndPassword;
+    }
+}

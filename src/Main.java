@@ -7,15 +7,23 @@ import java.util.Objects;
 public class Main{
     public static void main(String[] args) throws NoSuchAlgorithmException {
 
+        Console console = new Console();
+
         File userFolder = new File("users");
-        userFolder.mkdir();
+        userFolder.mkdir(); //Creates a folder for user data if it does not exist
 
+        String userInput = console.mainMenu();
 
-        Main main = new Main();
+        if (userInput.equalsIgnoreCase("signup")){
+
+        }
+    }
+
+    private static void signUp(){
 
     }
 
-    public String encrypt(String unencryptedMessage) throws NoSuchAlgorithmException {
+    private static String encrypt(String unencryptedMessage) throws NoSuchAlgorithmException { //Takes in a string and returns an encoded string
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedHash = digest.digest(unencryptedMessage.getBytes(StandardCharsets.UTF_8));
 
