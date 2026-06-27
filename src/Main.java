@@ -5,7 +5,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 public class Main{
+
+    static UserAccount[] users;
+
     public static void main(String[] args) throws NoSuchAlgorithmException {
+
+        users = new UserAccount[100];
 
         Console console = new Console();
 
@@ -15,12 +20,12 @@ public class Main{
         String userInput = console.mainMenu();
 
         if (userInput.equalsIgnoreCase("signup")){
+            String[] usernameAndPassword = console.inputUsernameAndPassword(); //0 index is username and 1 index is password
 
+
+
+            usernameAndPassword[1] = encrypt(usernameAndPassword[1]);
         }
-    }
-
-    private static void signUp(){
-
     }
 
     private static String encrypt(String unencryptedMessage) throws NoSuchAlgorithmException { //Takes in a string and returns an encoded string

@@ -12,7 +12,7 @@ public class Console {
         return (scanner.nextLine());
     }
 
-    public String[] getUsernameAndPassword(){
+    public String[] inputUsernameAndPassword(){
         String[] usernameAndPassword = new String[2];
 
         System.out.println("Enter username");
