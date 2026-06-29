@@ -18,10 +18,10 @@ public class UserAccount {
         //Returns true if the signup was successful
         boolean signUpSuccessful = true;
 
-        if (!(usernameAlreadyExists(userName))){
+        if (!(usernameAlreadyExists(username))){
             Path userListFile = Paths.get("users", "listOfUsers.txt");
             try (FileWriter fileWriter = new FileWriter(userListFile.toFile(), true)){
-                fileWriter.write(username);
+                fileWriter.write(username + "\n");
             }
 
             loggedIn = true;
@@ -29,7 +29,10 @@ public class UserAccount {
             Path userFile = Paths.get("users", username, username + ".txt"); //Text file which has the username and encoded password
             Files.createDirectory(userFolder);
             Files.createFile(userFile);
-            
+            try (FileWriter fileWriter = new FileWriter(userFile.toFile())){
+                fileWriter.write(username + "\n");
+                fileWriter.write(password + "\n");
+            }
 
         } else{signUpSuccessful = false;}
 

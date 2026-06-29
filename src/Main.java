@@ -10,6 +10,7 @@ public class Main{
     static UserAccount currentUser;
 
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
+        currentUser = new UserAccount();
 
         Console console = new Console();
 
@@ -19,14 +20,20 @@ public class Main{
         String userInput = console.mainMenu();
 
         if (userInput.equalsIgnoreCase("signup")){
+            boolean signUpSuccessful = false;
+            while (!signUpSuccessful){
+
+                String[] usernameAndPassword = console.inputUsernameAndPassword(); //0 index is username and 1 index is password
+
+                usernameAndPassword[1] = encryptSHA(usernameAndPassword[1]);
 
 
-            String[] usernameAndPassword = console.inputUsernameAndPassword(); //0 index is username and 1 index is password
-
-            usernameAndPassword[1] = encryptSHA(usernameAndPassword[1]);
-
-            currentUser = new UserAccount();
-            currentUser.signUp(usernameAndPassword[0], usernameAndPassword[1]);
+                if(currentUser.signUp(usernameAndPassword[0], usernameAndPassword[1])){
+                    signUpSuccessful = true;
+                    console.signUpSuccessfulMessage();
+                }//Stays in a loop until the sign up worked
+                else{console.signUpFailedMessage();}
+            }
         }
     }
 

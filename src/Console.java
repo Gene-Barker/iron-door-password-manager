@@ -23,4 +23,11 @@ public class Console {
 
         return usernameAndPassword;
     }
+
+    public void signUpFailedMessage(){
+        System.out.println("Sign up failed");
+    }
+    public void signUpSuccessfulMessage(){
+        System.out.println("Sign up successful");
+    }
 }
