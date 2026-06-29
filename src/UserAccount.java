@@ -25,6 +25,8 @@ public class UserAccount {
             Files.createFile(userFile);
 
         } else{signUpSuccessful = false;}
+
+        return (signUpSuccessful);
     }
 
     public boolean usernameAlreadyExists(String userName) throws IOException {
