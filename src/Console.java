@@ -30,4 +30,11 @@ public class Console {
     public void signUpSuccessfulMessage(){
         System.out.println("Sign up successful");
     }
+    public void logInSuccessfulMessage(){
+        System.out.println("Log in successful");
+    }
+    public void logInFailedMessage(){
+        System.out.println("Username or password is wrong");
+    }
+
 }

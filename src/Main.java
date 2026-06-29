@@ -40,8 +40,10 @@ public class Main{
             for (int i = 0; i < 3; i++){ //Only has 3 attempts allowed
                 String[] usernameAndPassword = console.inputUsernameAndPassword();
                 if (currentUser.logIn(usernameAndPassword[0], usernameAndPassword[1])){
-                    console.
+                    console.logInSuccessfulMessage();
+                    break;
                 }
+                else{console.logInFailedMessage();}
             }
         }
     }
