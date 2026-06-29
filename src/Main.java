@@ -40,9 +40,23 @@ public class Main{
         }
 
         if (userInput.equalsIgnoreCase("login")){
+            String[] usernameAndPassword = new String[2];
+
+            usernameAndPassword[0] = console.inputUsername();
+            usernameAndPassword[1] = encryptSHA(console.inputPassword());
+
+            while (!(currentUser.usernameExists(usernameAndPassword[0]))){
+                console.userNotFoundMessage();
+                usernameAndPassword[0] = console.inputUsername();
+            }
+
             for (int i = 0; i < 3; i++){ //Only has 3 attempts allowed
-                String[] usernameAndPassword = console.inputUsernameAndPassword();
-                if (currentUser.logIn(usernameAndPassword[0], usernameAndPassword[1])){
+
+
+                usernameAndPassword[0] = console.inputUsername();
+                usernameAndPassword[1] = encryptSHA(console.inputPassword());
+
+                if (currentUser.checkPassword(usernameAndPassword[1])){
                     console.logInSuccessfulMessage();
                     break;
                 }

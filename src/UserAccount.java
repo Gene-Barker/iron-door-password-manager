@@ -65,29 +65,8 @@ public class UserAccount {
 
         return usernameExists;
     }
-
-    public boolean logIn(String userNameAttempt, String passwordAttempt){
-        boolean logInSuccessful = false;
-        boolean usernameExists = false;
-        //First see if the user exists in the .txt file
-        Path listOfUsersPath = Paths.get(".users", "listOfUsers.txt");
-
-
-        try (Scanner fileReader = new Scanner(listOfUsersPath)){
-
-            while (fileReader.hasNextLine()){
-                if (userNameAttempt.equals(fileReader.nextLine())){usernameExists = true;}
-            }
-        }
-
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if (usernameExists){
-
-        }
-
-        return logInSuccessful;
+    public boolean checkPassword (String passwordAttempt){
+        
     }
 
 }

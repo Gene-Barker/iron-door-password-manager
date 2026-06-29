@@ -12,8 +12,11 @@ public class Console {
         return (scanner.nextLine());
     }
 
-    public String inputUsername(){
+    public void userNotFoundMessage(){
+        System.out.println("User not found, enter another username");
+    }
 
+    public String inputUsername(){
         System.out.println("Enter username");
         return(scanner.nextLine());
     }
