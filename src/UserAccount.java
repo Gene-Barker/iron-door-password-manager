@@ -18,7 +18,7 @@ public class UserAccount {
         //Returns true if the signup was successful
         boolean signUpSuccessful = true;
 
-        if (!(usernameAlreadyExists(username))){
+        if (!(usernameExists(username))){
             Path userListFile = Paths.get(".users", "listOfUsers.txt");
             try (FileWriter fileWriter = new FileWriter(userListFile.toFile(), true)){
                 fileWriter.write(username + "\n");
@@ -40,7 +40,7 @@ public class UserAccount {
         return (signUpSuccessful);
     }
 
-    public boolean usernameAlreadyExists(String userName) throws IOException {
+    public boolean usernameExists(String userName) throws IOException {
         long lines = 0; //Lines in the file. Used to get the length of array of usernames
         Path filePath = Paths.get(".users","listOfUsers.txt");
         boolean usernameExists = false;
@@ -68,12 +68,13 @@ public class UserAccount {
 
     public boolean logIn(String userNameAttempt, String passwordAttempt){
         boolean logInSuccessful = false;
+        boolean usernameExists = false;
         //First see if the user exists in the .txt file
         Path listOfUsersPath = Paths.get(".users", "listOfUsers.txt");
 
 
         try (Scanner fileReader = new Scanner(listOfUsersPath)){
-            boolean usernameExists = false;
+
             while (fileReader.hasNextLine()){
                 if (userNameAttempt.equals(fileReader.nextLine())){usernameExists = true;}
             }
@@ -81,6 +82,9 @@ public class UserAccount {
 
         catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        if (usernameExists){
+
         }
 
         return logInSuccessful;

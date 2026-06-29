@@ -23,15 +23,18 @@ public class Main{
             boolean signUpSuccessful = false;
             while (!signUpSuccessful){
 
-                String[] usernameAndPassword = console.inputUsernameAndPassword(); //0 index is username and 1 index is password
+                String[] usernameAndPassword = new String[2];
+                //0 index is username and 1 index is password
 
-                usernameAndPassword[1] = encryptSHA(usernameAndPassword[1]);
+                usernameAndPassword[0] = console.inputUsername();
+
+                usernameAndPassword[1] = encryptSHA(console.inputPassword());
 
 
                 if(currentUser.signUp(usernameAndPassword[0], usernameAndPassword[1])){
                     signUpSuccessful = true;
                     console.signUpSuccessfulMessage();
-                }//Stays in a loop until the sign up worked
+                }//Stays in a loop until the signup worked
                 else{console.signUpFailedMessage();}
             }
         }
