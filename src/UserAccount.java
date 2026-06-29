@@ -67,7 +67,11 @@ public class UserAccount {
     }
 
     public boolean logIn(String userNameAttempt, String passwordAttempt){
-
+        //First see if the user exists in the .txt file
+        Path listOfUsersPath = Paths.get(".users", "listOfUsers.txt");
+        try {
+            
+        }
     }
 
 }
