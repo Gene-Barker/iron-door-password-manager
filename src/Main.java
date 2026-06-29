@@ -35,6 +35,10 @@ public class Main{
                 else{console.signUpFailedMessage();}
             }
         }
+
+        if (userInput.equalsIgnoreCase("login")){
+            
+        }
     }
 
     private static String encryptSHA(String unencryptedMessage) throws NoSuchAlgorithmException { //Takes in a string and returns an encoded string
