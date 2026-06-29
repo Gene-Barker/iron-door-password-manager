@@ -5,6 +5,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
+import static java.lang.System.exit;
+
 public class Main{
 
     static UserAccount currentUser;
@@ -68,6 +70,10 @@ public class Main{
                     usernameAndPassword[1] = encryptSHA(console.inputPassword());
                 }
             }
+        }
+
+        if (userInput.equalsIgnoreCase("exit")){
+            exit(0);
         }
     }
 
