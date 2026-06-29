@@ -57,9 +57,6 @@ public class Main{
 
             for (int i = 0; i < 3; i++){ //Only has 3 attempts allowed
 
-
-
-
                 if (currentUser.checkPassword(usernameAndPassword[1])){
                     console.logInSuccessfulMessage();
                     currentUser.setLoggedIn(true);

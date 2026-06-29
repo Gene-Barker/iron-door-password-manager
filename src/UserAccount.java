@@ -83,4 +83,8 @@ public class UserAccount {
         loggedIn = loggedInStatus;
     }
 
+    public boolean isLoggedIn(){
+        return loggedIn;
+    }
+
 }
