@@ -23,14 +23,14 @@ public class Main{
 
             String[] usernameAndPassword = console.inputUsernameAndPassword(); //0 index is username and 1 index is password
 
-            usernameAndPassword[1] = encrypt(usernameAndPassword[1]);
+            usernameAndPassword[1] = encryptSHA(usernameAndPassword[1]);
 
             currentUser = new UserAccount();
             currentUser.signUp(usernameAndPassword[0], usernameAndPassword[1]);
         }
     }
 
-    private static String encrypt(String unencryptedMessage) throws NoSuchAlgorithmException { //Takes in a string and returns an encoded string
+    private static String encryptSHA(String unencryptedMessage) throws NoSuchAlgorithmException { //Takes in a string and returns an encoded string
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedHash = digest.digest(unencryptedMessage.getBytes(StandardCharsets.UTF_8));
 
