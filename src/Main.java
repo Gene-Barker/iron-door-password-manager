@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -6,11 +7,9 @@ import java.util.Objects;
 
 public class Main{
 
-    static UserAccount[] users;
+    static UserAccount currentUser;
 
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-
-        users = new UserAccount[100];
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
 
         Console console = new Console();
 
@@ -20,11 +19,14 @@ public class Main{
         String userInput = console.mainMenu();
 
         if (userInput.equalsIgnoreCase("signup")){
-            String[] usernameAndPassword = console.inputUsernameAndPassword(); //0 index is username and 1 index is password
 
 
+            //String[] usernameAndPassword = console.inputUsernameAndPassword(); //0 index is username and 1 index is password
 
-            usernameAndPassword[1] = encrypt(usernameAndPassword[1]);
+            //usernameAndPassword[1] = encrypt(usernameAndPassword[1]);
+
+            //currentUser = new UserAccount(usernameAndPassword[0], usernameAndPassword[1], true);
+            currentUser = new UserAccount("adsdsa", "asdaw", true);
         }
     }
 
