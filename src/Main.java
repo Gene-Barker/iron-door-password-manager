@@ -37,7 +37,12 @@ public class Main{
         }
 
         if (userInput.equalsIgnoreCase("login")){
-            
+            for (int i = 0; i < 3; i++){ //Only has 3 attempts allowed
+                String[] usernameAndPassword = console.inputUsernameAndPassword();
+                if (currentUser.logIn(usernameAndPassword[0], usernameAndPassword[1])){
+                    console.
+                }
+            }
         }
     }
 

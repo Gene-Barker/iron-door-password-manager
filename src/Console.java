@@ -23,7 +23,7 @@ public class Console {
 
         return usernameAndPassword;
     }
-
+//Do i need all of these messages to be separate methods? Prolly not
     public void signUpFailedMessage(){
         System.out.println("Sign up failed");
     }
