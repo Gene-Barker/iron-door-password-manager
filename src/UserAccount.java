@@ -19,11 +19,17 @@ public class UserAccount {
         boolean signUpSuccessful = true;
 
         if (!(usernameAlreadyExists(userName))){
+            Path userListFile = Paths.get("users", "listOfUsers.txt");
+            try (FileWriter fileWriter = new FileWriter(userListFile.toFile(), true)){
+                fileWriter.write(username);
+            }
+
             loggedIn = true;
             Path userFolder = Paths.get("users", username); //Folder to hold user data
             Path userFile = Paths.get("users", username, username + ".txt"); //Text file which has the username and encoded password
             Files.createDirectory(userFolder);
             Files.createFile(userFile);
+            
 
         } else{signUpSuccessful = false;}
 
