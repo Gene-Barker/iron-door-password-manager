@@ -13,20 +13,20 @@ public class Main{
 
         Console console = new Console();
 
-        File userFolder = new File("users");
-        userFolder.mkdir(); //Creates a folder for user data if it does not exist
+        File usersFolder = new File("users");
+        usersFolder.mkdir(); //Creates a folder for user data if it does not exist
 
         String userInput = console.mainMenu();
 
         if (userInput.equalsIgnoreCase("signup")){
 
 
-            //String[] usernameAndPassword = console.inputUsernameAndPassword(); //0 index is username and 1 index is password
+            String[] usernameAndPassword = console.inputUsernameAndPassword(); //0 index is username and 1 index is password
 
-            //usernameAndPassword[1] = encrypt(usernameAndPassword[1]);
+            usernameAndPassword[1] = encrypt(usernameAndPassword[1]);
 
-            //currentUser = new UserAccount(usernameAndPassword[0], usernameAndPassword[1], true);
-            currentUser = new UserAccount("adsdsa", "asdaw", true);
+            currentUser = new UserAccount();
+            currentUser.signUp(usernameAndPassword[0], usernameAndPassword[1]);
         }
     }
 

@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,18 +11,20 @@ public class UserAccount {
     String password; //Password is encoded in SHA 265 in this variable
     boolean loggedIn; //True if the user is logged in. If the user is not logged in the data cannot be accessed
 
-    public UserAccount(String userName, String password, boolean newAccount) throws IOException {
-        if (newAccount){
-
-            System.out.println(usernameAlreadyExists(userName));
-
-            //FileWriter fileWriter = new FileWriter();
-
-        }
+    public UserAccount(){
     }
 
-    public void signUp(String username, String password) {
+    public boolean signUp(String username, String password) throws IOException {
+        //Returns true if the signup was successful
+        boolean signUpSuccessful = true;
 
+        if (!(usernameAlreadyExists(userName))){
+            Path userFolder = Paths.get("users", username); //Folder to hold user data
+            Path userFile = Paths.get("users", username, username + ".txt"); //Text file which has the username and encoded password
+            Files.createDirectory(userFolder);
+            Files.createFile(userFile);
+
+        } else{signUpSuccessful = false;}
     }
 
     public boolean usernameAlreadyExists(String userName) throws IOException {
