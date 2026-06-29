@@ -19,14 +19,14 @@ public class UserAccount {
         boolean signUpSuccessful = true;
 
         if (!(usernameAlreadyExists(username))){
-            Path userListFile = Paths.get("users", "listOfUsers.txt");
+            Path userListFile = Paths.get(".users", "listOfUsers.txt");
             try (FileWriter fileWriter = new FileWriter(userListFile.toFile(), true)){
                 fileWriter.write(username + "\n");
             }
 
             loggedIn = true;
-            Path userFolder = Paths.get("users", username); //Folder to hold user data
-            Path userFile = Paths.get("users", username, username + ".txt"); //Text file which has the username and encoded password
+            Path userFolder = Paths.get(".users", username); //Folder to hold user data
+            Path userFile = Paths.get(".users", username, username + ".txt"); //Text file which has the username and encoded password
             Files.createDirectory(userFolder);
             Files.createFile(userFile);
             try (FileWriter fileWriter = new FileWriter(userFile.toFile())){
@@ -41,7 +41,7 @@ public class UserAccount {
 
     public boolean usernameAlreadyExists(String userName) throws IOException {
         long lines = 0; //Lines in the file. Used to get the length of array of usernames
-        Path filePath = Paths.get("users","listOfUsers.txt");
+        Path filePath = Paths.get(".users","listOfUsers.txt");
         boolean usernameExists = false;
 
         if (!(Files.exists(filePath))){Files.createFile(filePath);} //Can't do this in the except block, I'm sure someone else can figure that out

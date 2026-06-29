@@ -14,7 +14,7 @@ public class Main{
 
         Console console = new Console();
 
-        File usersFolder = new File("users");
+        File usersFolder = new File(".users");
         usersFolder.mkdir(); //Creates a folder for user data if it does not exist
 
         String userInput = console.mainMenu();
