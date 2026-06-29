@@ -19,6 +19,7 @@ public class UserAccount {
         boolean signUpSuccessful = true;
 
         if (!(usernameAlreadyExists(userName))){
+            loggedIn = true;
             Path userFolder = Paths.get("users", username); //Folder to hold user data
             Path userFile = Paths.get("users", username, username + ".txt"); //Text file which has the username and encoded password
             Files.createDirectory(userFolder);
