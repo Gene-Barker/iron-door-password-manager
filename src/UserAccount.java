@@ -82,6 +82,8 @@ public class UserAccount {
         catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return logInSuccessful;
     }
 
 }
