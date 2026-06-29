@@ -41,32 +41,42 @@ public class UserAccount {
     }
 
     public boolean usernameExists(String userName) throws IOException {
-        long lines = 0; //Lines in the file. Used to get the length of array of usernames
+
         Path filePath = Paths.get(".users","listOfUsers.txt");
         boolean usernameExists = false;
 
         if (!(Files.exists(filePath))){Files.createFile(filePath);} //Can't do this in the except block, I'm sure someone else can figure that out
 
-        try {
-            lines = Files.lines(filePath).count(); //Method gets number of lines in the file
-            int linesInt = Math.toIntExact(lines); //Have to convert to int
 
             try (Scanner fileReader = new Scanner(filePath)) { //Makes a scanner object with the path to list of users
-                for (int i = 0; fileReader.hasNextLine(); i++){
+                while (fileReader.hasNextLine()){
                      if (userName.equals(fileReader.nextLine())){usernameExists = true;}
                 }
             }
 
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
 
 
         return usernameExists;
     }
-    public boolean checkPassword (String passwordAttempt){
-        
+
+    public void setUsername(String username){
+        userName = username;
+    }
+
+    public boolean checkPassword (String passwordAttempt) throws IOException {
+        Path filePath = Paths.get(".users",userName, userName + ".txt");
+        boolean passwordCorrect = false;
+
+
+        try (Scanner fileReader = new Scanner(filePath)) { //Makes a scanner object with the path to list of users
+            while (fileReader.hasNextLine()) {
+                if (passwordAttempt.equals(fileReader.nextLine())) {
+                    passwordCorrect = true;
+                }
+            }
+        }
+        return passwordCorrect;
+
     }
 
 }

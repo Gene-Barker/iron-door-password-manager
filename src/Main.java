@@ -45,22 +45,30 @@ public class Main{
             usernameAndPassword[0] = console.inputUsername();
             usernameAndPassword[1] = encryptSHA(console.inputPassword());
 
+            System.out.println("1");
+
             while (!(currentUser.usernameExists(usernameAndPassword[0]))){
+                System.out.println("2");
                 console.userNotFoundMessage();
                 usernameAndPassword[0] = console.inputUsername();
             }
+            System.out.println("3");
+            currentUser.setUsername(usernameAndPassword[0]);
 
             for (int i = 0; i < 3; i++){ //Only has 3 attempts allowed
 
 
-                usernameAndPassword[0] = console.inputUsername();
-                usernameAndPassword[1] = encryptSHA(console.inputPassword());
+
 
                 if (currentUser.checkPassword(usernameAndPassword[1])){
                     console.logInSuccessfulMessage();
                     break;
                 }
-                else{console.logInFailedMessage();}
+                else{
+                    console.logInFailedMessage();
+                    usernameAndPassword[0] = console.inputUsername();
+                    usernameAndPassword[1] = encryptSHA(console.inputPassword());
+                }
             }
         }
     }
