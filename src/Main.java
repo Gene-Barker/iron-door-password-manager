@@ -62,6 +62,7 @@ public class Main{
 
                 if (currentUser.checkPassword(usernameAndPassword[1])){
                     console.logInSuccessfulMessage();
+                    currentUser.setLoggedIn(true);
                     break;
                 }
                 else{

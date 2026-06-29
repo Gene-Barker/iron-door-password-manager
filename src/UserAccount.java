@@ -79,4 +79,8 @@ public class UserAccount {
 
     }
 
+    public void setLoggedIn(boolean loggedInStatus){
+        loggedIn = loggedInStatus;
+    }
+
 }
