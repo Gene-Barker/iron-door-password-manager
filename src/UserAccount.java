@@ -30,6 +30,7 @@ public class UserAccount {
             Files.createDirectory(userFolder);
             Files.createFile(userFile);
             try (FileWriter fileWriter = new FileWriter(userFile.toFile())){
+                //Writes the username and password to file, in that order
                 fileWriter.write(username + "\n");
                 fileWriter.write(password + "\n");
             }
@@ -63,6 +64,10 @@ public class UserAccount {
 
 
         return usernameExists;
+    }
+
+    public boolean logIn(String userNameAttempt, String passwordAttempt){
+
     }
 
 }
