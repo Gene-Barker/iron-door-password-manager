@@ -42,19 +42,11 @@ public class UserAccount {
 
     public boolean usernameExists(String userName) throws IOException {
 
-        Path filePath = Paths.get(".users","listOfUsers.txt");
+        Path filePath = Paths.get(".users",userName);
         boolean usernameExists = false;
-
-        if (!(Files.exists(filePath))){Files.createFile(filePath);} //Can't do this in the except block, I'm sure someone else can figure that out
-
-
-            try (Scanner fileReader = new Scanner(filePath)) { //Makes a scanner object with the path to list of users
-                while (fileReader.hasNextLine()){
-                     if (userName.equals(fileReader.nextLine())){usernameExists = true;}
-                }
-            }
-
-
+        if (Files.exists(filePath)){
+            usernameExists = true;
+        }
 
         return usernameExists;
     }
