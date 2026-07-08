@@ -79,4 +79,10 @@ public class UserAccount {
         return loggedIn;
     }
 
+    public boolean addAccount(String accountSite, String accountUsername, String password){
+        //Account site is the website for the account
+        Path filePath = Paths.get(".users", userName, accountSite + ".txt");
+
+    }
+
 }
