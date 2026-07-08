@@ -7,9 +7,9 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class UserAccount {
-    String userName;
-    String password; //Password is encoded in SHA 265 in this variable
-    boolean loggedIn; //True if the user is logged in. If the user is not logged in the data cannot be accessed
+    private String userName;
+    private String password; //Password is encoded in SHA 265 in this variable
+    private boolean loggedIn; //True if the user is logged in. If the user is not logged in the data cannot be accessed
 
     public UserAccount(){
     }

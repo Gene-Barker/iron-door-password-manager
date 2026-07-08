@@ -75,6 +75,10 @@ public class Main{
         if (userInput.equalsIgnoreCase("exit")){
             exit(0);
         }
+
+        if (currentUser.isLoggedIn()){
+            
+        }
     }
 
     private static String encryptSHA(String unencryptedMessage) throws NoSuchAlgorithmException { //Takes in a string and returns an encoded string
