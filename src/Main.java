@@ -51,7 +51,7 @@ public class Main{
             String[] usernameAndPassword = new String[2];
 
             usernameAndPassword[0] = console.inputUsername();
-            usernameAndPassword[1] = encryptSHA(console.inputPassword());
+            usernameAndPassword[1] = encryptSHA(console.inputPassword()); //Password is encrypted as soon as its inputted for extra security I guess
 
 
             while (!(currentUser.usernameExists(usernameAndPassword[0]))){
@@ -105,7 +105,7 @@ public class Main{
         SecureRandom.getInstanceStrong().nextBytes(iv);
 
         // 2. Initialize the Cipher for encryption
-        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding\"");
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         GCMParameterSpec parameterSpec = new GCMParameterSpec(128, iv);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
 
