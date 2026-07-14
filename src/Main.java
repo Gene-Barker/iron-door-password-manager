@@ -17,7 +17,7 @@ public class Main{
 
     static UserAccount currentUser;
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
+    public static void main(String[] args) throws Exception {
         currentUser = new UserAccount();
 
         Console console = new Console();
@@ -80,7 +80,7 @@ public class Main{
         }
 
         if (currentUser.isLoggedIn()){
-
+            System.out.println(encryptAES(console.inputPassword(), generateKey()));
         }
     }
 
@@ -99,7 +99,7 @@ public class Main{
         return keyGenerator.generateKey();
     }
 
-    public static String encrypt(String plainText, SecretKey secretKey) throws Exception {
+    public static String encryptAES(String plainText, SecretKey secretKey) throws Exception {
         // 1. Generate a random Initialization Vector (IV) for uniqueness
         byte[] iv = new byte[12];
         SecureRandom.getInstanceStrong().nextBytes(iv);

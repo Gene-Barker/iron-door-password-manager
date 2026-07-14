@@ -23,7 +23,10 @@ public class Console {
     public String inputPassword(){
         System.out.println("Enter password");
         return (scanner.nextLine());
-
+    }
+    public String inputSitename(){
+        System.out.println("Enter site name");
+        return (scanner.nextLine());
     }
 //Do i need all of these messages to be separate methods? Prolly not
     public void signUpFailedMessage(){
@@ -38,5 +41,6 @@ public class Console {
     public void logInFailedMessage(){
         System.out.println("Username or password is wrong");
     }
+
 
 }
