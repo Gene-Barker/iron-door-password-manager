@@ -1,8 +1,14 @@
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Objects;
 
 import static java.lang.System.exit;
@@ -47,14 +53,11 @@ public class Main{
             usernameAndPassword[0] = console.inputUsername();
             usernameAndPassword[1] = encryptSHA(console.inputPassword());
 
-            System.out.println("1");
 
             while (!(currentUser.usernameExists(usernameAndPassword[0]))){
-                System.out.println("2");
                 console.userNotFoundMessage();
                 usernameAndPassword[0] = console.inputUsername();
             }
-            System.out.println("3");
             currentUser.setUsername(usernameAndPassword[0]);
 
             for (int i = 0; i < 3; i++){ //Only has 3 attempts allowed
@@ -81,11 +84,41 @@ public class Main{
         }
     }
 
-    private static String encryptSHA(String unencryptedMessage) throws NoSuchAlgorithmException { //Takes in a string and returns an encoded string
+    public static String encryptSHA(String unencryptedMessage) throws NoSuchAlgorithmException { //Takes in a string and returns an encoded string
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedHash = digest.digest(unencryptedMessage.getBytes(StandardCharsets.UTF_8));
 
 
         return (new String(encodedHash));
     }
+
+    public static SecretKey generateKey() throws NoSuchAlgorithmException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        keyGenerator.init(256);
+
+        return keyGenerator.generateKey();
+    }
+
+    public static String encrypt(String plainText, SecretKey secretKey) throws Exception {
+        // 1. Generate a random Initialization Vector (IV) for uniqueness
+        byte[] iv = new byte[12];
+        SecureRandom.getInstanceStrong().nextBytes(iv);
+
+        // 2. Initialize the Cipher for encryption
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding\"");
+        GCMParameterSpec parameterSpec = new GCMParameterSpec(128, iv);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
+
+        // 3. Perform encryption
+        byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
+
+        // 4. Combine IV and Encrypted Bytes into one array to make management simpler
+        byte[] combinedPayload = new byte[iv.length + encryptedBytes.length];
+        System.arraycopy(iv, 0, combinedPayload, 0, iv.length);
+        System.arraycopy(encryptedBytes, 0, combinedPayload, iv.length, encryptedBytes.length);
+
+        // 5. Encode to Base64 string for safe text transmission
+        return Base64.getEncoder().encodeToString(combinedPayload);
+    }
+
 }
