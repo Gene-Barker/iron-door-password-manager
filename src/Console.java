@@ -1,3 +1,4 @@
+import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
 import java.util.Scanner;
 
 public class Console {
@@ -42,5 +43,9 @@ public class Console {
         System.out.println("Username or password is wrong");
     }
 
+    public String userLoggedInMenu(){
+        System.out.println("Do you want to \n1. Get a username and password\n2. Add a username and password\n3. Delete a username and password\n4. Delete this account");
+        return (scanner.nextLine());
+    }
 
 }

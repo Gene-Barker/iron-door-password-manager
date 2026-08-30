@@ -80,13 +80,13 @@ public class Main{
         }
 
         if (currentUser.isLoggedIn()){
-
+            userInput = console.userLoggedInMenu();
             
-
-            String siteName = console.inputSitename();
-            SecretKey key = generateKey();
-            String username = console.inputUsername();
-
+            if (Objects.equals(userInput, "2")) {
+                String siteName = console.inputSitename();
+                SecretKey key = generateKey();
+                String username = console.inputUsername();
+            }
             System.out.println(encryptAES(console.inputPassword(), generateKey()));
         }
     }
