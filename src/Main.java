@@ -83,6 +83,7 @@ public class Main{
             userInput = console.userLoggedInMenu();
             
             if (Objects.equals(userInput, "2")) {
+                //This code is fucking horrible i hate my life 
                 String siteName = console.inputSitename();
                 SecretKey key = generateKey();
                 String username = console.inputUsername();
