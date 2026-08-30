@@ -1,3 +1,4 @@
+import javax.crypto.SecretKey;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -79,9 +80,11 @@ public class UserAccount {
         return loggedIn;
     }
 
-    //public boolean addAccount(String accountSite, String accountUsername, String password){
+    public boolean addAccount(String accountSite, String accountUsername, String password, SecretKey key) {
         //Account site is the website for the account
-       // Path filePath = Paths.get(".users", userName, accountSite + ".txt");
 
+        Path filePath = Paths.get(".users", userName, accountSite + ".txt");
 
+        return true;
+    }
 }

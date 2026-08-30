@@ -83,10 +83,12 @@ public class Main{
             userInput = console.userLoggedInMenu();
             
             if (Objects.equals(userInput, "2")) {
-                //This code is fucking horrible i hate my life 
+                //This code is fucking horrible i hate my life
                 String siteName = console.inputSitename();
                 SecretKey key = generateKey();
                 String username = console.inputUsername();
+                String password = encryptAES(console.inputPassword(), key);
+
             }
             System.out.println(encryptAES(console.inputPassword(), generateKey()));
         }
