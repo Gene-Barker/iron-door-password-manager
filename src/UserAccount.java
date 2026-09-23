@@ -20,8 +20,10 @@ public class UserAccount {
         boolean signUpSuccessful = true;
 
         if (!(usernameExists(username))){
+            //Creates a path to the file and then writes to it
             Path userListFile = Paths.get(".users", "listOfUsers.txt");
             try (FileWriter fileWriter = new FileWriter(userListFile.toFile(), true)){
+                //If the file exists write to it
                 fileWriter.write(username + "\n");
             }
 
@@ -80,11 +82,22 @@ public class UserAccount {
         return loggedIn;
     }
 
-    public boolean addAccount(String accountSite, String accountUsername, String password, SecretKey key) {
+    public boolean addAccount(String accountSite, String accountUsername, String password, SecretKey key) throws IOException {
+        boolean accountAdded = false;
+
         //Account site is the website for the account
 
         Path filePath = Paths.get(".users", userName, accountSite + ".txt");
-
-        return true;
+        //Checking if the file already exists
+        if (!(Files.exists(filePath))){
+            try (FileWriter fileWriter = new FileWriter(filePath.toFile(), true)){
+                fileWriter.write(accountSite + "\n");
+                fileWriter.write(accountUsername + "\n");
+                fileWriter.write(password + "\n");
+                fileWriter.write(key + "\n");
+            }
+        }
+        else {accountAdded = false;}//Techniclly redundent but I like it
+        return accountAdded;
     }
 }

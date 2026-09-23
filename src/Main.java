@@ -88,6 +88,7 @@ public class Main{
                 SecretKey key = generateKey();
                 String username = console.inputUsername();
                 String password = encryptAES(console.inputPassword(), key);
+                currentUser.addAccount(siteName, username, password, key);
 
             }
             System.out.println(encryptAES(console.inputPassword(), generateKey()));
