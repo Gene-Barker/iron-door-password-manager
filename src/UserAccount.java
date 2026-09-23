@@ -1,4 +1,5 @@
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -84,12 +85,12 @@ public class UserAccount {
 
     public String[] readAccount(String accountSite) throws IOException {
         //Just return the whole thing and deal with it in main
-        String[] userNameAndPassword = new String[4];
+        String[] userNameAndPassword = new String[3];
         Path filePath = Paths.get(".users", userName, accountSite + ".txt");
         if (Files.exists(filePath)){
             try (Scanner fileReader = new Scanner(filePath)) {
 
-                for (int i = 0; fileReader.hasNextLine(); i++){//For loop for going through the file and reading from it
+                for (int i = 1; fileReader.hasNextLine(); i++){//For loop for going through the file and reading from it
                     userNameAndPassword[i] = fileReader.nextLine();
                 }
             }
@@ -101,7 +102,7 @@ public class UserAccount {
         return userNameAndPassword;
     }
 
-    public boolean addAccount(String accountSite, String accountUsername, String password, SecretKey key) throws IOException {
+    public boolean addAccount(String accountSite, String accountUsername, String password, SecretKey key, GCMParameterSpec iv) throws IOException {
         boolean accountAdded = false;
 
         //Account site is the website for the account
@@ -116,6 +117,7 @@ public class UserAccount {
                 //Might fix it one day
                 fileWriter.write(password + "\n");
                 fileWriter.write(key + "\n");
+                fileWriter.write(iv + "\n");
                 accountAdded = true;
             }
         }

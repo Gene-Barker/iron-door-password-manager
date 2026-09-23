@@ -1,13 +1,10 @@
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.*;
 import java.util.Base64;
 import java.util.Objects;
 
@@ -81,17 +78,45 @@ public class Main{
 
         if (currentUser.isLoggedIn()){
             userInput = console.userLoggedInMenu();
-            
+
+            if (Objects.equals(userInput, "1")){
+                String[] usernameAndPassword = new String[3];
+                String username;
+                String password;
+                String plainKey;
+                String plainIv;
+                SecretKey key;
+                GCMParameterSpec iv;
+
+                String siteName = console.inputSitename();
+                usernameAndPassword = currentUser.readAccount(siteName);
+                username = usernameAndPassword[0];
+                password = usernameAndPassword[1];
+                plainKey = usernameAndPassword[2];
+                plainIv = usernameAndPassword[3];
+
+                //Convert the key and iv into the correct data type
+
+                // decode the base64 encoded string
+                byte[] decodedKey = Base64.getDecoder().decode(plainKey);
+                // rebuild key using SecretKeySpec
+                key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+
+
+            }
+
             if (Objects.equals(userInput, "2")) {
                 //This code is fucking horrible i hate my life
                 String siteName = console.inputSitename();
+                GCMParameterSpec iv = generateIv();
                 SecretKey key = generateKey();
                 String username = console.inputUsername();
-                String password = encryptAES(console.inputPassword(), key);
-                if (currentUser.addAccount(siteName, username, password, key)){
+                String password = encryptAES("AES/GCM/NoPadding", console.inputPassword(), key, iv);
+                if (currentUser.addAccount(siteName, username, password, key, iv)) {
                     console.addAccountSuccessfulMessage();
+                } else {
+                    console.addAccountFailedMessage();
                 }
-                else {console.addAccountFailedMessage();}
             }
         }
     }
@@ -110,27 +135,23 @@ public class Main{
 
         return keyGenerator.generateKey();
     }
-//All of this part is stolen btw, idk where from tho I forgot
-    public static String encryptAES(String plainText, SecretKey secretKey) throws Exception {
-        // 1. Generate a random Initialization Vector (IV) for uniqueness
+
+
+    public static GCMParameterSpec generateIv(){
         byte[] iv = new byte[12];
-        SecureRandom.getInstanceStrong().nextBytes(iv);
-
-        // 2. Initialize the Cipher for encryption
-        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-        GCMParameterSpec parameterSpec = new GCMParameterSpec(128, iv);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
-
-        // 3. Perform encryption
-        byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
-
-        // 4. Combine IV and Encrypted Bytes into one array to make management simpler
-        byte[] combinedPayload = new byte[iv.length + encryptedBytes.length];
-        System.arraycopy(iv, 0, combinedPayload, 0, iv.length);
-        System.arraycopy(encryptedBytes, 0, combinedPayload, iv.length, encryptedBytes.length);
-
-        // 5. Encode to Base64 string for safe text transmission
-        return Base64.getEncoder().encodeToString(combinedPayload);
+        new SecureRandom().nextBytes(iv);
+        return new GCMParameterSpec(128, iv);
     }
+//All of this part is stolen btw, idk where from tho I forgot
+public static String encryptAES(String algorithm, String input, SecretKey key, GCMParameterSpec iv) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
+    Cipher cipher = Cipher.getInstance(algorithm);
+    cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+    byte[] cipherText = cipher.doFinal(input.getBytes());
+    return Base64.getEncoder()
+            .encodeToString(cipherText);
+}
+    public static String decryptAES(String plainText, SecretKey secretKey, GCMParameterSpec iv){
+
+    }
 }
