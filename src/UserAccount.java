@@ -93,6 +93,8 @@ public class UserAccount {
             try (FileWriter fileWriter = new FileWriter(filePath.toFile(), true)){
                 fileWriter.write(accountSite + "\n");
                 fileWriter.write(accountUsername + "\n");
+                //Storing the key and password as plain text is pretty stupid lowkey, not secure at all
+                //Might fix it one day
                 fileWriter.write(password + "\n");
                 fileWriter.write(key + "\n");
                 accountAdded = true;
