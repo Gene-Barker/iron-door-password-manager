@@ -48,5 +48,6 @@ public class Console {
         return (scanner.nextLine());
     }
     public void addAccountSuccessfulMessage(){System.out.println("Added a new account and password");}
+    public void addAccountFailedMessage(){System.out.println("Account already exists");}
 
 }

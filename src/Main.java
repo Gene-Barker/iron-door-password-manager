@@ -91,6 +91,7 @@ public class Main{
                 if (currentUser.addAccount(siteName, username, password, key)){
                     console.addAccountSuccessfulMessage();
                 }
+                else {console.addAccountFailedMessage();}
             }
         }
     }
@@ -109,7 +110,7 @@ public class Main{
 
         return keyGenerator.generateKey();
     }
-
+//All of this part is stolen btw, idk where from tho I forgot
     public static String encryptAES(String plainText, SecretKey secretKey) throws Exception {
         // 1. Generate a random Initialization Vector (IV) for uniqueness
         byte[] iv = new byte[12];
