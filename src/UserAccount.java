@@ -82,6 +82,25 @@ public class UserAccount {
         return loggedIn;
     }
 
+    public String[] readAccount(String accountSite) throws IOException {
+        //Just return the whole thing and deal with it in main
+        String[] userNameAndPassword = new String[4];
+        Path filePath = Paths.get(".users", userName, accountSite + ".txt");
+        if (Files.exists(filePath)){
+            try (Scanner fileReader = new Scanner(filePath)) {
+
+                for (int i = 0; fileReader.hasNextLine(); i++){//For loop for going through the file and reading from it
+                    userNameAndPassword[i] = fileReader.nextLine();
+                }
+            }
+        }
+        else{//If the account doesnt exist just return null
+            userNameAndPassword = new String[] {null, null, null, null};
+
+        }
+        return userNameAndPassword;
+    }
+
     public boolean addAccount(String accountSite, String accountUsername, String password, SecretKey key) throws IOException {
         boolean accountAdded = false;
 
