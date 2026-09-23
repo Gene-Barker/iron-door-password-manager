@@ -88,10 +88,10 @@ public class Main{
                 SecretKey key = generateKey();
                 String username = console.inputUsername();
                 String password = encryptAES(console.inputPassword(), key);
-                currentUser.addAccount(siteName, username, password, key);
-
+                if (currentUser.addAccount(siteName, username, password, key)){
+                    console.addAccountSuccessfulMessage();
+                }
             }
-            System.out.println(encryptAES(console.inputPassword(), generateKey()));
         }
     }
 

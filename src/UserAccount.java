@@ -95,6 +95,7 @@ public class UserAccount {
                 fileWriter.write(accountUsername + "\n");
                 fileWriter.write(password + "\n");
                 fileWriter.write(key + "\n");
+                accountAdded = true;
             }
         }
         else {accountAdded = false;}//Techniclly redundent but I like it
