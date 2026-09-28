@@ -148,10 +148,13 @@ public static String encryptAES(String algorithm, String input, SecretKey key, G
     Cipher cipher = Cipher.getInstance(algorithm);
     cipher.init(Cipher.ENCRYPT_MODE, key, iv);
     byte[] cipherText = cipher.doFinal(input.getBytes());
-    return Base64.getEncoder()
-            .encodeToString(cipherText);
+    return Base64.getEncoder().encodeToString(cipherText);
 }
-    public static String decryptAES(String plainText, SecretKey secretKey, GCMParameterSpec iv){
-
+    public static String decryptAES(String algorithm, String cipherText, SecretKey key, GCMParameterSpec iv) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        Cipher cipher = Cipher.getInstance(algorithm);
+        cipher.init(Cipher.DECRYPT_MODE, key, iv);
+        byte[] plainText = cipher.doFinal(Base64.getDecoder()
+                .decode(cipherText));
+        return new String(plainText);
     }
 }
