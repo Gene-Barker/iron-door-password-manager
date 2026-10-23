@@ -80,15 +80,16 @@ public class Main{
             userInput = console.userLoggedInMenu();
 
             if (Objects.equals(userInput, "1")){
-                String[] usernameAndPassword = new String[3];
+                String[] usernameAndPassword;
                 String username;
                 String password;
                 String plainKey;
                 String plainIv;
-                SecretKey key;
-                GCMParameterSpec iv;
+                //SecretKey key;
+                byte[] iv;
 
                 String siteName = console.inputSitename();
+
                 usernameAndPassword = currentUser.readAccount(siteName);
                 username = usernameAndPassword[0];
                 password = usernameAndPassword[1];
@@ -100,9 +101,11 @@ public class Main{
                 // decode the base64 encoded string
                 byte[] decodedKey = Base64.getDecoder().decode(plainKey);
                 // rebuild key using SecretKeySpec
-                key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+                SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
 
+                iv = Base64.getDecoder().decode(plainIv);
 
+                System.out.println(decryptAES("AES/GCM/NoPadding", password, key, iv));
             }
 
             if (Objects.equals(userInput, "2")) {
@@ -110,9 +113,19 @@ public class Main{
                 String siteName = console.inputSitename();
                 GCMParameterSpec iv = generateIv();
                 SecretKey key = generateKey();
+                String keyString; //Need a string version of secret key and IV
+                String ivString;
                 String username = console.inputUsername();
                 String password = encryptAES("AES/GCM/NoPadding", console.inputPassword(), key, iv);
-                if (currentUser.addAccount(siteName, username, password, key, iv)) {
+
+                byte[] rawData = key.getEncoded();
+                keyString = Base64.getEncoder().encodeToString(rawData);
+
+                byte[] ivBytes = iv.getIV();
+                ivString = Base64.getEncoder().encodeToString(ivBytes);
+
+
+                if (currentUser.addAccount(siteName, username, password, keyString, ivString)) {
                     console.addAccountSuccessfulMessage();
                 } else {
                     console.addAccountFailedMessage();
@@ -142,19 +155,21 @@ public class Main{
         new SecureRandom().nextBytes(iv);
         return new GCMParameterSpec(128, iv);
     }
-//All of this part is stolen btw, idk where from tho I forgot
-public static String encryptAES(String algorithm, String input, SecretKey key, GCMParameterSpec iv) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    //All of this part is stolen btw, idk where from tho I forgot
+    public static String encryptAES(String algorithm, String input, SecretKey key, GCMParameterSpec iv) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
-    Cipher cipher = Cipher.getInstance(algorithm);
-    cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-    byte[] cipherText = cipher.doFinal(input.getBytes());
-    return Base64.getEncoder().encodeToString(cipherText);
-}
-    public static String decryptAES(String algorithm, String cipherText, SecretKey key, GCMParameterSpec iv) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.DECRYPT_MODE, key, iv);
-        byte[] plainText = cipher.doFinal(Base64.getDecoder()
-                .decode(cipherText));
-        return new String(plainText);
+        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+        byte[] cipherText = cipher.doFinal(input.getBytes());
+        return Base64.getEncoder().encodeToString(cipherText);
     }
+    public static String decryptAES(String algorithm, String cipherText, SecretKey key, byte[] iv) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+
+        GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
+        Cipher cipher = Cipher.getInstance(algorithm);
+        cipher.init(Cipher.DECRYPT_MODE, key, gcmSpec);
+        byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText));
+        return new String(plainText);
+        }
+
 }

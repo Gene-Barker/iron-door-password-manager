@@ -85,24 +85,26 @@ public class UserAccount {
 
     public String[] readAccount(String accountSite) throws IOException {
         //Just return the whole thing and deal with it in main
-        String[] userNameAndPassword = new String[3];
+        String[] userNameAndPassword = new String[4];
         Path filePath = Paths.get(".users", userName, accountSite + ".txt");
         if (Files.exists(filePath)){
             try (Scanner fileReader = new Scanner(filePath)) {
 
-                for (int i = 1; fileReader.hasNextLine(); i++){//For loop for going through the file and reading from it
-                    userNameAndPassword[i] = fileReader.nextLine();
-                }
+                for (int i = 0; fileReader.hasNextLine(); i++){//For loop for going through the file and reading from it
+                    String nextLine = fileReader.nextLine();
+                    if (!nextLine.isBlank()) {
+                        userNameAndPassword[i] = nextLine;
+                    }
+                    }
             }
         }
         else{//If the account doesnt exist just return null
             userNameAndPassword = new String[] {null, null, null, null};
-
         }
         return userNameAndPassword;
     }
 
-    public boolean addAccount(String accountSite, String accountUsername, String password, SecretKey key, GCMParameterSpec iv) throws IOException {
+    public boolean addAccount(String accountSite, String accountUsername, String password, String key, String iv) throws IOException {
         boolean accountAdded = false;
 
         //Account site is the website for the account
@@ -111,13 +113,13 @@ public class UserAccount {
         //Checking if the file already exists
         if (!(Files.exists(filePath))){
             try (FileWriter fileWriter = new FileWriter(filePath.toFile(), true)){
-                fileWriter.write(accountSite + "\n");
+
                 fileWriter.write(accountUsername + "\n");
                 //Storing the key and password as plain text is pretty stupid lowkey, not secure at all
                 //Might fix it one day
                 fileWriter.write(password + "\n");
                 fileWriter.write(key + "\n");
-                fileWriter.write(iv + "\n");
+                fileWriter.write(iv);
                 accountAdded = true;
             }
         }
