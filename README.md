@@ -17,5 +17,4 @@ Mostly used so I can keep track of what I want to add. This list will grow in th
 | User passwords are encrypted when stored | :white_check_mark: |
 | Can generate secure passwords | :x: |
 | GUI | :x: |
-| Can store account names and passwords for other sites 
-(i.e. does what a password manager is supposed to do) | :white_check_mark: |
+| Can store account names and passwords for other sites <br>(i.e. does what a password manager is supposed to do) | :white_check_mark: |
