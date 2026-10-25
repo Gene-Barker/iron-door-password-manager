@@ -8,7 +8,7 @@
 Very basic version of my program which is still very in development. Hopefully it will be finished at some point unlike my other projects
 
 ## Table of Features
-Mostly used so I can keep track of what I want to add
+Mostly used so I can keep track of what I want to add. This list will grow in the future
 
 | Feature       | Implemented? |
 |:------------- | :----------: |
