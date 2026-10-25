@@ -5,7 +5,7 @@
 
 ## Version Alpha 0.1
 
-Very basic version of my program which is still very in development. Hopefully it will be finished at some point unlike my other projects
+Very basic version of my program which is still very in development. Hopefully it will be finished at some point unlike my other projects. Also please don't make fun of me for my bad code, I'm very sorry
 
 ## Table of Features
 Mostly used so I can keep track of what I want to add. This list will grow in the future
