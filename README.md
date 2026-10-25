@@ -9,3 +9,4 @@ Very basic version of my program which is still very in development. Hopefully i
 
 | Feature       | Implemented? |
 |:------------- | :----------: |
+| CLI           | :white_check_mark: |
