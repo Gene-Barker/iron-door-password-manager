@@ -21,12 +21,6 @@ public class UserAccount {
         boolean signUpSuccessful = true;
 
         if (!(usernameExists(username))){
-            //Creates a path to the file and then writes to it
-            Path userListFile = Paths.get(".users", "listOfUsers.txt");
-            try (FileWriter fileWriter = new FileWriter(userListFile.toFile(), true)){
-                //If the file exists write to it
-                fileWriter.write(username + "\n");
-            }
 
             loggedIn = true;
             Path userFolder = Paths.get(".users", username); //Folder to hold user data
