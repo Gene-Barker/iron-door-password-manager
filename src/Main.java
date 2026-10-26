@@ -88,27 +88,7 @@ public class Main {
 
 
             if (Objects.equals(userInput, "2")) {
-                //This code is fucking horrible i hate my life
-                String siteName = console.inputSitename();
-                GCMParameterSpec iv = generateIv();
-                SecretKey key = generateKey();
-                String keyString; //Need a string version of secret key and IV
-                String ivString;
-                String username = console.inputUsername();
-                String password = encryptAES("AES/GCM/NoPadding", console.inputPassword(), key, iv);
-
-                byte[] rawData = key.getEncoded();
-                keyString = Base64.getEncoder().encodeToString(rawData);
-
-                byte[] ivBytes = iv.getIV();
-                ivString = Base64.getEncoder().encodeToString(ivBytes);
-
-
-                if (currentUser.addAccount(siteName, username, password, keyString, ivString)) {
-                    console.addAccountSuccessfulMessage();
-                } else {
-                    console.addAccountFailedMessage();
-                }
+                addAccount();
             }
         }
     }
@@ -152,7 +132,7 @@ public class Main {
         return usernameAndPassword;
     }
 
-        public static String encryptSHA (String unencryptedMessage) throws NoSuchAlgorithmException
+    public static String encryptSHA (String unencryptedMessage) throws NoSuchAlgorithmException
         { //Takes in a string and returns an encoded string
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] encodedHash = digest.digest(unencryptedMessage.getBytes(StandardCharsets.UTF_8));
@@ -161,7 +141,7 @@ public class Main {
             return (new String(encodedHash));
         }
 
-        public static SecretKey generateKey () throws NoSuchAlgorithmException {
+    public static SecretKey generateKey () throws NoSuchAlgorithmException {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
             keyGenerator.init(256);
 
@@ -169,13 +149,13 @@ public class Main {
         }
 
 
-        public static GCMParameterSpec generateIv () {
+    public static GCMParameterSpec generateIv () {
             byte[] iv = new byte[12];
             new SecureRandom().nextBytes(iv);
             return new GCMParameterSpec(128, iv);
         }
-        //All of this part is stolen btw, idk where from tho I forgot
-        public static String encryptAES (String algorithm, String input, SecretKey key, GCMParameterSpec iv) throws
+    //All of this part is stolen btw, idk where from tho I forgot
+    public static String encryptAES (String algorithm, String input, SecretKey key, GCMParameterSpec iv) throws
         NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
         {
 
@@ -184,7 +164,8 @@ public class Main {
             byte[] cipherText = cipher.doFinal(input.getBytes());
             return Base64.getEncoder().encodeToString(cipherText);
         }
-        public static String decryptAES (String algorithm, String cipherText, SecretKey key,byte[] iv) throws
+
+    public static String decryptAES (String algorithm, String cipherText, SecretKey key,byte[] iv) throws
         NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
         {
 
@@ -195,4 +176,32 @@ public class Main {
             return new String(plainText);
         }
 
+    public static int addAccount() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
+
+        int exitCode;
+        //This code is fucking horrible i hate my life
+        String siteName = console.inputSitename();
+        GCMParameterSpec iv = generateIv();
+        SecretKey key = generateKey();
+        String keyString; //Need a string version of secret key and IV
+        String ivString;
+        String username = console.inputUsername();
+        String password = encryptAES("AES/GCM/NoPadding", console.inputPassword(), key, iv);
+
+        byte[] rawData = key.getEncoded();
+        keyString = Base64.getEncoder().encodeToString(rawData);
+
+        byte[] ivBytes = iv.getIV();
+        ivString = Base64.getEncoder().encodeToString(ivBytes);
+
+
+        if (currentUser.addAccount(siteName, username, password, keyString, ivString)) {
+            console.addAccountSuccessfulMessage();
+            exitCode = 0;
+        } else {
+            console.addAccountFailedMessage();
+            exitCode = 1;
+        }
+        return exitCode;
     }
+}
