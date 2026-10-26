@@ -90,6 +90,7 @@ public class Main {
             if (Objects.equals(userInput, "2")) {
                 addAccount();
             }
+            if (Objects.equals(userInput, "5")){exit(0);}//Exit
         }
     }
 

@@ -44,7 +44,11 @@ public class Console {
     }
 
     public String userLoggedInMenu(){
-        System.out.println("Do you want to \n1. Get a username and password\n2. Add a username and password\n3. Delete a username and password\n4. Delete this account");
+        System.out.println("Do you want to \n1. Get a username and password" +
+                "\n2. Add a username and password" +
+                "\n3. Delete a username and password" +
+                "\n4. Delete this account" +
+                "\n5. Exit this program");
         return (scanner.nextLine());
     }
     public void addAccountSuccessfulMessage(){System.out.println("Added a new account and password");}
