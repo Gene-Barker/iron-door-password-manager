@@ -10,23 +10,24 @@ import java.util.Objects;
 
 import static java.lang.System.exit;
 
-public class Main{
+public class Main {
 
     static UserAccount currentUser;
+    static Console console;
 
     public static void main(String[] args) throws Exception {
         currentUser = new UserAccount();
 
-        Console console = new Console();
+        console = new Console();
 
         File usersFolder = new File(".users");
         usersFolder.mkdir(); //Creates a folder for user data if it does not exist
 
         String userInput = console.mainMenu();
 
-        if (userInput.equalsIgnoreCase("signup")){
+        if (userInput.equalsIgnoreCase("signup")) {
             boolean signUpSuccessful = false;
-            while (!signUpSuccessful){
+            while (!signUpSuccessful) {
 
                 String[] usernameAndPassword = new String[2];
                 //0 index is username and 1 index is password
@@ -36,35 +37,36 @@ public class Main{
                 usernameAndPassword[1] = encryptSHA(console.inputPassword());
 
 
-                if(currentUser.signUp(usernameAndPassword[0], usernameAndPassword[1])){
+                if (currentUser.signUp(usernameAndPassword[0], usernameAndPassword[1])) {
                     signUpSuccessful = true;
                     console.signUpSuccessfulMessage();
                 }//Stays in a loop until the signup worked
-                else{console.signUpFailedMessage();}
+                else {
+                    console.signUpFailedMessage();
+                }
             }
         }
 
-        if (userInput.equalsIgnoreCase("login")){
+        if (userInput.equalsIgnoreCase("login")) {
             String[] usernameAndPassword = new String[2];
 
             usernameAndPassword[0] = console.inputUsername();
             usernameAndPassword[1] = encryptSHA(console.inputPassword()); //Password is encrypted as soon as its inputted for extra security I guess
 
 
-            while (!(currentUser.usernameExists(usernameAndPassword[0]))){
+            while (!(currentUser.usernameExists(usernameAndPassword[0]))) {
                 console.userNotFoundMessage();
                 usernameAndPassword[0] = console.inputUsername();
             }
             currentUser.setUsername(usernameAndPassword[0]);
 
-            for (int i = 0; i < 3; i++){ //Only has 3 attempts allowed
+            for (int i = 0; i < 3; i++) { //Only has 3 attempts allowed
 
-                if (currentUser.checkPassword(usernameAndPassword[1])){
+                if (currentUser.checkPassword(usernameAndPassword[1])) {
                     console.logInSuccessfulMessage();
                     currentUser.setLoggedIn(true);
                     break;
-                }
-                else{
+                } else {
                     console.logInFailedMessage();
                     usernameAndPassword[0] = console.inputUsername();
                     usernameAndPassword[1] = encryptSHA(console.inputPassword());
@@ -72,41 +74,18 @@ public class Main{
             }
         }
 
-        if (userInput.equalsIgnoreCase("exit")){
+        if (userInput.equalsIgnoreCase("exit")) {
             exit(0);
         }
 
-        if (currentUser.isLoggedIn()){
+        if (currentUser.isLoggedIn()) {
             userInput = console.userLoggedInMenu();
 
-            if (Objects.equals(userInput, "1")){
-                String[] usernameAndPassword;
-                String username;
-                String password;
-                String plainKey;
-                String plainIv;
-                //SecretKey key;
-                byte[] iv;
+            if (Objects.equals(userInput, "1")) {
+                getAccountInfo();
 
-                String siteName = console.inputSitename();
-
-                usernameAndPassword = currentUser.readAccount(siteName);
-                username = usernameAndPassword[0];
-                password = usernameAndPassword[1];
-                plainKey = usernameAndPassword[2];
-                plainIv = usernameAndPassword[3];
-
-                //Convert the key and iv into the correct data type
-
-                // decode the base64 encoded string
-                byte[] decodedKey = Base64.getDecoder().decode(plainKey);
-                // rebuild key using SecretKeySpec
-                SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-
-                iv = Base64.getDecoder().decode(plainIv);
-
-                System.out.println(decryptAES("AES/GCM/NoPadding", password, key, iv));
             }
+
 
             if (Objects.equals(userInput, "2")) {
                 //This code is fucking horrible i hate my life
@@ -134,42 +113,86 @@ public class Main{
         }
     }
 
-    public static String encryptSHA(String unencryptedMessage) throws NoSuchAlgorithmException { //Takes in a string and returns an encoded string
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedHash = digest.digest(unencryptedMessage.getBytes(StandardCharsets.UTF_8));
+
+    public static String[] getAccountInfo() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IOException {
+        //Now that I think about it this didn't need to be it's own function...
+        String[] usernameAndPassword;
+        String siteName = console.inputSitename();
+        usernameAndPassword = currentUser.readAccount(siteName);
+        String username;
+        String password;
+        String plainKey;
+        String plainIv;
+        //SecretKey key;
+        byte[] iv;
 
 
-        return (new String(encodedHash));
+
+
+        if (!(usernameAndPassword[0] == null)){
+
+            username = usernameAndPassword[0];
+            password = usernameAndPassword[1];
+            plainKey = usernameAndPassword[2];
+            plainIv = usernameAndPassword[3];
+
+            //Convert the key and iv into the correct data type
+
+            // decode the base64 encoded string
+            byte[] decodedKey = Base64.getDecoder().decode(plainKey);
+            // rebuild key using SecretKeySpec
+            SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+
+            iv = Base64.getDecoder().decode(plainIv);
+
+            usernameAndPassword[1] = decryptAES("AES/GCM/NoPadding", password, key, iv);
+
+        }
+        console.displayUsernameAndPassword(usernameAndPassword, siteName);
+        return usernameAndPassword;
     }
 
-    public static SecretKey generateKey() throws NoSuchAlgorithmException {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(256);
-
-        return keyGenerator.generateKey();
-    }
+        public static String encryptSHA (String unencryptedMessage) throws NoSuchAlgorithmException
+        { //Takes in a string and returns an encoded string
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedHash = digest.digest(unencryptedMessage.getBytes(StandardCharsets.UTF_8));
 
 
-    public static GCMParameterSpec generateIv(){
-        byte[] iv = new byte[12];
-        new SecureRandom().nextBytes(iv);
-        return new GCMParameterSpec(128, iv);
-    }
-    //All of this part is stolen btw, idk where from tho I forgot
-    public static String encryptAES(String algorithm, String input, SecretKey key, GCMParameterSpec iv) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-
-        Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-        byte[] cipherText = cipher.doFinal(input.getBytes());
-        return Base64.getEncoder().encodeToString(cipherText);
-    }
-    public static String decryptAES(String algorithm, String cipherText, SecretKey key, byte[] iv) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-
-        GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
-        Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.DECRYPT_MODE, key, gcmSpec);
-        byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText));
-        return new String(plainText);
+            return (new String(encodedHash));
         }
 
-}
+        public static SecretKey generateKey () throws NoSuchAlgorithmException {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            keyGenerator.init(256);
+
+            return keyGenerator.generateKey();
+        }
+
+
+        public static GCMParameterSpec generateIv () {
+            byte[] iv = new byte[12];
+            new SecureRandom().nextBytes(iv);
+            return new GCMParameterSpec(128, iv);
+        }
+        //All of this part is stolen btw, idk where from tho I forgot
+        public static String encryptAES (String algorithm, String input, SecretKey key, GCMParameterSpec iv) throws
+        NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+        {
+
+            Cipher cipher = Cipher.getInstance(algorithm);
+            cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+            byte[] cipherText = cipher.doFinal(input.getBytes());
+            return Base64.getEncoder().encodeToString(cipherText);
+        }
+        public static String decryptAES (String algorithm, String cipherText, SecretKey key,byte[] iv) throws
+        NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+        {
+
+            GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
+            Cipher cipher = Cipher.getInstance(algorithm);
+            cipher.init(Cipher.DECRYPT_MODE, key, gcmSpec);
+            byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText));
+            return new String(plainText);
+        }
+
+    }

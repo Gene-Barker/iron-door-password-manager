@@ -49,5 +49,13 @@ public class Console {
     }
     public void addAccountSuccessfulMessage(){System.out.println("Added a new account and password");}
     public void addAccountFailedMessage(){System.out.println("Account already exists");}
+    public void displayUsernameAndPassword(String[] usernameAndPassword, String siteName){
+        if (usernameAndPassword[0] == null){
+            System.out.println("No information has been recorded for this site. Please try again");
+        }
+        else{
+            System.out.println("Username and password for " + siteName +"\nUsername: " + usernameAndPassword[0] + "\nPassword: " + usernameAndPassword[1] );
+        }
+    }
 
 }
