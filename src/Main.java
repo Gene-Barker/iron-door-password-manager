@@ -23,74 +23,92 @@ public class Main {
         File usersFolder = new File(".users");
         usersFolder.mkdir(); //Creates a folder for user data if it does not exist
 
-        String userInput = console.mainMenu();
 
-        if (userInput.equalsIgnoreCase("signup")) {
-            boolean signUpSuccessful = false;
-            while (!signUpSuccessful) {
-
-                String[] usernameAndPassword = new String[2];
-                //0 index is username and 1 index is password
-
-                usernameAndPassword[0] = console.inputUsername();
-
-                usernameAndPassword[1] = encryptSHA(console.inputPassword());
+        while (true) {
 
 
-                if (currentUser.signUp(usernameAndPassword[0], usernameAndPassword[1])) {
-                    signUpSuccessful = true;
-                    console.signUpSuccessfulMessage();
-                }//Stays in a loop until the signup worked
-                else {
-                    console.signUpFailedMessage();
-                }
-            }
-        }
+            String userInput = console.mainMenu();
 
-        if (userInput.equalsIgnoreCase("login")) {
-            String[] usernameAndPassword = new String[2];
+            if (userInput.equalsIgnoreCase("signup")) {
+                boolean signUpSuccessful = false;
+                while (!signUpSuccessful) {
 
-            usernameAndPassword[0] = console.inputUsername();
-            usernameAndPassword[1] = encryptSHA(console.inputPassword()); //Password is encrypted as soon as its inputted for extra security I guess
+                    String[] usernameAndPassword = new String[2];
+                    //0 index is username and 1 index is password
 
-
-            while (!(currentUser.usernameExists(usernameAndPassword[0]))) {
-                console.userNotFoundMessage();
-                usernameAndPassword[0] = console.inputUsername();
-            }
-            currentUser.setUsername(usernameAndPassword[0]);
-
-            for (int i = 0; i < 3; i++) { //Only has 3 attempts allowed
-
-                if (currentUser.checkPassword(usernameAndPassword[1])) {
-                    console.logInSuccessfulMessage();
-                    currentUser.setLoggedIn(true);
-                    break;
-                } else {
-                    console.logInFailedMessage();
                     usernameAndPassword[0] = console.inputUsername();
+
                     usernameAndPassword[1] = encryptSHA(console.inputPassword());
+
+
+                    if (currentUser.signUp(usernameAndPassword[0], usernameAndPassword[1])) {
+                        signUpSuccessful = true;
+                        console.signUpSuccessfulMessage();
+                    }//Stays in a loop until the signup worked
+                    else {
+                        console.signUpFailedMessage();
+                    }
                 }
             }
-        }
 
-        if (userInput.equalsIgnoreCase("exit")) {
-            exit(0);
-        }
+            if (userInput.equalsIgnoreCase("login")) {
+                String[] usernameAndPassword = new String[2];
 
-        if (currentUser.isLoggedIn()) {
-            userInput = console.userLoggedInMenu();
+                usernameAndPassword[0] = console.inputUsername();
+                usernameAndPassword[1] = encryptSHA(console.inputPassword()); //Password is encrypted as soon as its inputted for extra security I guess
 
-            if (Objects.equals(userInput, "1")) {
-                getAccountInfo();
 
+                while (!(currentUser.usernameExists(usernameAndPassword[0]))) {
+                    console.userNotFoundMessage();
+                    usernameAndPassword[0] = console.inputUsername();
+                }
+                currentUser.setUsername(usernameAndPassword[0]);
+
+                for (int i = 0; i < 3; i++) { //Only has 3 attempts allowed
+
+                    if (currentUser.checkPassword(usernameAndPassword[1])) {
+                        console.logInSuccessfulMessage();
+                        currentUser.setLoggedIn(true);
+                        break;
+                    } else {
+                        console.logInFailedMessage();
+                        usernameAndPassword[0] = console.inputUsername();
+                        usernameAndPassword[1] = encryptSHA(console.inputPassword());
+                    }
+                }
             }
 
-
-            if (Objects.equals(userInput, "2")) {
-                addAccount();
+            if (userInput.equalsIgnoreCase("exit")) {
+                exit(0);
             }
-            if (Objects.equals(userInput, "5")){exit(0);}//Exit
+
+            while (currentUser.isLoggedIn()) {
+                userInput = console.userLoggedInMenu();
+
+                if (Objects.equals(userInput, "1")) {
+                    getAccountInfo();
+                }
+
+                if (Objects.equals(userInput, "2")) {
+                    addAccount();
+                }
+
+                if (Objects.equals(userInput, "3")) {
+                    deleteAccount();
+                }
+
+                if (Objects.equals(userInput, "4")) {
+                    deleteUserAccount();
+                }
+
+                if (Objects.equals(userInput, "5")) {
+                    currentUser.setLoggedIn(false);
+                }
+
+                if (Objects.equals(userInput, "6")) {
+                    exit(0);
+                }//Exit
+            }
         }
     }
 
@@ -189,9 +207,12 @@ public class Main {
         String username = console.inputUsername();
         String password = encryptAES("AES/GCM/NoPadding", console.inputPassword(), key, iv);
 
+        //Converts the key into a string so it can be added to the file
         byte[] rawData = key.getEncoded();
         keyString = Base64.getEncoder().encodeToString(rawData);
 
+
+        //Coverts the gcm into a string
         byte[] ivBytes = iv.getIV();
         ivString = Base64.getEncoder().encodeToString(ivBytes);
 
@@ -204,5 +225,22 @@ public class Main {
             exitCode = 1;
         }
         return exitCode;
+    }
+
+    public static int deleteAccount(){
+        int exitCode;
+        String siteName = console.inputSitename();
+
+        if ( !(Objects.equals(siteName, currentUser.getUserName()))) {
+            exitCode = currentUser.deleteAccount(siteName);
+        }
+        else {
+            exitCode = 1;
+        }
+        return exitCode;
+    }
+
+    public static void deleteUserAccount(){
+        currentUser.deleteThisAccount();
     }
 }

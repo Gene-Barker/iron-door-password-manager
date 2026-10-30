@@ -77,10 +77,12 @@ public class UserAccount {
         return loggedIn;
     }
 
-    public String[] readAccount(String accountSite) throws IOException {
+    public String getUserName() {return userName;}
+
+    public String[] readAccount(String siteName) throws IOException {
         //Just return the whole thing and deal with it in main
         String[] userNameAndPassword = new String[4];
-        Path filePath = Paths.get(".users", userName, accountSite + ".txt");
+        Path filePath = Paths.get(".users", userName, siteName + ".txt");
         if (Files.exists(filePath)){
             try (Scanner fileReader = new Scanner(filePath)) {
 
@@ -98,12 +100,12 @@ public class UserAccount {
         return userNameAndPassword;
     }
 
-    public boolean addAccount(String accountSite, String accountUsername, String password, String key, String iv) throws IOException {
+    public boolean addAccount(String siteName, String accountUsername, String password, String key, String iv) throws IOException {
         boolean accountAdded = false;
 
         //Account site is the website for the account
 
-        Path filePath = Paths.get(".users", userName, accountSite + ".txt");
+        Path filePath = Paths.get(".users", userName, siteName + ".txt");
         //Checking if the file already exists
         if (!(Files.exists(filePath))){
             try (FileWriter fileWriter = new FileWriter(filePath.toFile(), true)){
@@ -119,5 +121,39 @@ public class UserAccount {
         }
         else {accountAdded = false;}//Techniclly redundent but I like it
         return accountAdded;
+    }
+
+    public int deleteAccount (String siteName){
+        int exitCode;
+        Path filePath = Paths.get(".users", userName, siteName + ".txt");
+
+        File accountFile = new File(filePath.toUri());
+
+        if (accountFile.delete()){
+            exitCode = 0;
+        }
+        else {
+            exitCode = 1;
+        }
+        return exitCode;
+    }
+
+    public void deleteThisAccount(){
+        Path filePath = Paths.get(".users", userName);
+
+        File accountFolder = new File(filePath.toUri());
+
+        deleteDirectory(accountFolder);
+    }
+
+    public void deleteDirectory(File accountFolder){
+        File[] userData = accountFolder.listFiles();
+
+        if (userData != null){
+            for (File file : userData){
+                deleteDirectory(file);
+            }
+        }
+        accountFolder.delete();
     }
 }
